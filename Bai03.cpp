@@ -3,20 +3,21 @@
 //  + ten su kien
 //  + do quan trong (4 muc: khong quan trong, co chut quan trong, kha quan trong, rat quan trong)
 #include <iostream>
+#include <string>
 #define MAX 1000
 using namespace std;
 
 struct thoi_diem {
-    int ngay;  
-    int thang; 
-    int nam;  
-    int gio;   
-    int phut;   
+    int ngay;
+    int thang;
+    int nam;
+    int gio;
+    int phut;
 };
 
 struct su_kien {
     thoi_diem thoidiem;
-    char ten;
+    string ten;
     int doquantrong;
 };
 // Khai báo biến và mảng
@@ -29,16 +30,16 @@ void nhapSuKien(int& sosukien);
 void thaySuKien(int i); // sua su kien sk[i]
 void xuatSuKien(int i); // in ra su kien sk[i]
 void xuatQuanTrong(int doquantrong); // chuyen doquantrong {0,1,2,3} -> {k quan trong,hoi quan trong , kha quan trong,rat quan trong}, dung switch
-void SuKienDoQuangTrongCao(int sosukien); // cac su kien kha quan trong va rat quan trong
+void SuKienDoQuanTrongCao(int sosukien); // cac su kien kha quan trong va rat quan trong
 void SuKienBuoiSang(int sosukien);  // cac su kien dien ra vao buoi sang 4h-11h
 void suaMucDoQuanTrong(int i);
 void xuatSuKienRatQuanTrong(int sosukien); // Xac dinh mot su kien rat quan trong khi biet thoi diem
-void SapXepSuKien(su_kien sk[], int sosukien, int s[]) ;
-void xoaSuKien(su_kien sk[], int& sosukien, int p) ;
-void xoaSuKienKhongQuanTrong(su_kien sk[], int &sosukien);
+void SapXepSuKien(su_kien sk[], int sosukien, int s[]);
+void xoaSuKien(su_kien sk[], int& sosukien, int p);
+void xoaSuKienKhongQuanTrong(su_kien sk[], int& sosukien);
 int SoNgayTrongThang(int month);
 bool LaNgayHopLe(int ngay, int thang, int nam);
-void TinhThoiGian(su_kien sk[],int sosukien, int s[]) ;
+void TinhThoiGian(su_kien sk[], int sosukien, int s[]);
 
 
 
@@ -47,8 +48,8 @@ void TinhThoiGian(su_kien sk[],int sosukien, int s[]) ;
 int main() {
     int i, sosukien;
     nhapSuKien(sosukien);
-    cout << "Liet ke cac su kien co do quan trong cao: " << endl;
-    SuKienDoQuangTrongCao(sosukien);
+    cout << "Liet ke cac su kien co do quan trong 'hoi quan trong' va 'rat quan trong' : " << endl;
+    SuKienDoQuanTrongCao(sosukien);
     cout << "Liet ke cac su kien dien ra vao buoi sang: " << endl;
     SuKienBuoiSang(sosukien);
     cout << "Chon thoi diem muon sua muc do quan trong(0 ung voi thoi diem dau tien): ";
@@ -56,21 +57,21 @@ int main() {
     suaMucDoQuanTrong(i);
     cout << "Moi nhap thoi diem de xuat su kien rat quan trong sau thoi diem do: " << endl;
     xuatSuKienRatQuanTrong(sosukien);
-    TinhThoiGian(sk,sosukien,thoigian);
-    SapXepSuKien(sk,sosukien,thoigian);
-    cout<<"\nDanh sach su kien sau khi da sap xep la: \n";
-    for (int i=0; i<sosukien; i++)
-         {
+    TinhThoiGian(sk, sosukien, thoigian);
+    SapXepSuKien(sk, sosukien, thoigian);
+    cout << "\nDanh sach su kien sau khi da sap xep la: \n";
+    for (int i = 0; i < sosukien; i++)
+    {
         xuatSuKien(i);
-        cout<<endl;
-        }
-    xoaSuKienKhongQuanTrong(sk,sosukien);
-    cout<<"\nDanh sach su kien sau khi xoa su kien khong quan trong: \n";
-    for (int i=0; i<sosukien; i++)
-         {
+        cout << endl;
+    }
+    xoaSuKienKhongQuanTrong(sk, sosukien);
+    cout << "\nDanh sach su kien sau khi xoa su kien khong quan trong: \n";
+    for (int i = 0; i < sosukien; i++)
+    {
         xuatSuKien(i);
-        cout<<endl;
-        }
+        cout << endl;
+    }
     system("pause");
     return 0;
 }
@@ -80,15 +81,15 @@ void nhapSuKien(int& sosukien) {
     cout << "Nhap so su kien can nhap: ";
     cin >> sosukien;
     for (int i = 0; i < sosukien; i++) {
-        cout << "Nhap su kien thu " << i+1<< endl;
+        cout << "Nhap su kien thu " << i + 1 << endl;
         thaySuKien(i); // nhập sk[i]
     }
 }
 void thaySuKien(int i) {
-    cout << "Nhap thoi diem (ngay/thang/nam/gio/phut): "<<endl;
+    cout << "Nhap thoi diem (ngay/thang/nam/gio/phut): " << endl;
     nhapthoidiem(i);
     cout << "Nhap ten su kien: ";
-    cin >> sk[i].ten;
+    cin>> sk[i].ten;
     do {
         cout << "Nhap muc do quan trong(0/1/2/3): ";
         cin >> sk[i].doquantrong;
@@ -96,7 +97,7 @@ void thaySuKien(int i) {
 }
 void xuatSuKien(int i) {
     cout << " Ten su kien: " << sk[i].ten << endl;
-    cout << " Thoi diem dien ra su kien: " << sk[i].thoidiem.ngay << " / " << sk[i].thoidiem.thang << " / " << sk[i].thoidiem.nam << ". Luc: " << sk[i].thoidiem.gio << " gio " << sk[i].thoidiem.phut<< " phut" << endl;
+    cout << " Thoi diem dien ra su kien: " << sk[i].thoidiem.ngay << " / " << sk[i].thoidiem.thang << " / " << sk[i].thoidiem.nam << ". Luc: " << sk[i].thoidiem.gio << " gio " << sk[i].thoidiem.phut << " phut" << endl;
     cout << " Muc do quan trong: ";
     xuatQuanTrong(sk[i].doquantrong);
     cout << endl;
@@ -122,7 +123,7 @@ void xuatQuanTrong(int doquantrong) {
     }
     }
 }
-void SuKienDoQuangTrongCao(int sosukien) {
+void SuKienDoQuanTrongCao(int sosukien) {
     for (int i = 0; i < sosukien; i++) {
         if (sk[i].doquantrong == 2 || sk[i].doquantrong == 3) {
             xuatSuKien(i);
@@ -138,39 +139,39 @@ void SuKienBuoiSang(int sosukien) {
 }
 
 // Ham doi thoi gian ra phut
-void TinhThoiGian(su_kien sk[],int sosukien, int s[]) 
+void TinhThoiGian(su_kien sk[], int sosukien, int s[])
 {
 
-    for (int i=0; i<sosukien; i++)
+    for (int i = 0; i < sosukien; i++)
     {
-        thoigian[i]= (sk[i].thoidiem.nam*12*43200 + sk[i].thoidiem.thang*43200 + sk[i].thoidiem.ngay*1440 + sk[i].thoidiem.gio*60 + sk[i].thoidiem.phut);
+        thoigian[i] = (sk[i].thoidiem.nam * 12 * 43200 + sk[i].thoidiem.thang * 43200 + sk[i].thoidiem.ngay * 1440 + sk[i].thoidiem.gio * 60 + sk[i].thoidiem.phut);
     }
 }
 // Ham sap xep su kien theo thu tu thoi gian
-void SapXepSuKien(su_kien sk[], int sosukien, int thoigian[]) 
+void SapXepSuKien(su_kien sk[], int sosukien, int thoigian[])
 {
-    for (int i=0; i<sosukien-1; i++)
-        for (int j=1+i; j<sosukien; j++)
+    for (int i = 0; i < sosukien - 1; i++)
+        for (int j = 1 + i; j < sosukien; j++)
         {
-            if (thoigian[i]>thoigian[j])
+            if (thoigian[i] > thoigian[j])
             {
                 su_kien temp = sk[i];
-                sk[i]= sk[j];
-                sk[j]= temp;
+                sk[i] = sk[j];
+                sk[j] = temp;
             }
         }
 }
 // Ham huy su kien, p la vi tri can huy
-void xoaSuKien(su_kien sk[], int& sosukien, int p) 
+void xoaSuKien(su_kien sk[], int& sosukien, int p)
 {
-    for (int i=p; i<sosukien; i++)
-        sk[i]=sk[i+1];
-    sosukien--;             
+    for (int i = p; i < sosukien; i++)
+        sk[i] = sk[i + 1];
+    sosukien--;
     // So su kien giam xuong 1, vi ta da xoa di 1 su kien
 }
-void xoaSuKienKhongQuanTrong(su_kien sk[], int &sosukien)
+void xoaSuKienKhongQuanTrong(su_kien sk[], int& sosukien)
 {
-    for (int i=0; i<sosukien; i++)
+    for (int i = 0; i < sosukien; i++)
     {
         if (sk[i].doquantrong == 0)
         {
@@ -185,11 +186,10 @@ void suaMucDoQuanTrong(int i) {
 }
 
 void xuatSuKienRatQuanTrong(int sosukien) {
-    int i;
-    nhapthoidiem(i);
-    for (int j = i + 1; j < sosukien; j++) {
+    nhapthoidiem(sosukien);
+    for (int j = 0; j < sosukien; j++) {
         if (sk[j].doquantrong == 3)
-            xuatSuKien(i);
+            xuatSuKien(j);
     }
 }
 void nhapthoidiem(int i) {
@@ -200,7 +200,7 @@ void nhapthoidiem(int i) {
         cin >> sk[i].thoidiem.thang;
         cout << "Nhap nam: ";
         cin >> sk[i].thoidiem.nam;
-    }  while (LaNgayHopLe(sk[i].thoidiem.ngay, sk[i].thoidiem.thang, sk[i].thoidiem.nam) == false);
+    } while (LaNgayHopLe(sk[i].thoidiem.ngay, sk[i].thoidiem.thang, sk[i].thoidiem.nam) == false);
     do {
         cout << "Nhap gio: ";
         cin >> sk[i].thoidiem.gio;
@@ -214,25 +214,24 @@ void nhapthoidiem(int i) {
 int SoNgayTrongThang(int month) {
     switch (month) {
         // Thang 2 cua nam 2021/2022 co 28 ngay
-        case 2:
-            return 28;
+    case 2:
+        return 28;
         // Cac thang 4, 6, 9, 11 co 30 ngay
-        case 4: case 6: case 9: case 11: 
-            return 30;
+    case 4: case 6: case 9: case 11:
+        return 30;
         // Cac thang 1, 3, 5, 7, 8, 10, 12 co 31 ngay
-        case 1: case 3: case 5: case 7: case 8: case 10: case 12:   
-            return 31;
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+        return 31;
     }
 }
 // Ham kiem tra xem du lieu nhap vao co hop le hay khong
-bool LaNgayHopLe(int ngay, int thang, int nam) {    
+bool LaNgayHopLe(int ngay, int thang, int nam) {
     if (0 < ngay && ngay <= SoNgayTrongThang(thang)) {
-        if ((nam == 2021 || nam == 2022) && (0 < thang && thang <= 12)) 
+        if ((nam == 2021 || nam == 2022) && (0 < thang && thang <= 12))
             return true;
         else
             return false;
     }
-    else 
+    else
         return false;
 }
-
